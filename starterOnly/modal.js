@@ -21,4 +21,9 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
+// close modal form
+const closeSpan = document.querySelector(".close")
+closeSpan.addEventListener("click", () => {
+  modalbg.style.display = ""
+})
 
