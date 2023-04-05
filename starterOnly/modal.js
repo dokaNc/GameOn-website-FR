@@ -36,8 +36,10 @@ closeSpan.addEventListener("click", () => {
 });
 
 // Check Minimum 2 Characters
-const checkMinimumLength = (input, formData, event) => {
-  return input.value.length <= 2
+const checkName = (input, formData, event) => {
+  const regex = new RegExp(/^\s+/);
+
+  return input.value.length <= 2 || regex.test(input.value)
     ? ((formData.dataset.errorVisible = true), event.preventDefault())
     : (formData.dataset.errorVisible = false);
 };
@@ -84,11 +86,14 @@ const conditionIsChecked = (checkbox, formData, event) => {
 
 // Form on Submit
 addEventListener("submit", (event) => {
-  checkMinimumLength(firstName, formData[0], event);
-  checkMinimumLength(lastName, formData[1], event);
+  checkName(firstName, formData[0], event);
+  checkName(lastName, formData[1], event);
   checkIsEmail(email, formData[2], event);
   checkIsDate(birthdate, formData[3], event);
   checkNumber(parseInt(numbTournament.value), formData[4], event);
   countryIsChecked(formData[5], event);
   conditionIsChecked(conditionCheckbox, formData[6], event);
 });
+
+// Birthdate constrainte: -18 ans interdit & date du genre année 1750
+// Input first & last regex pour ne pas autoriser les chiffres & la method yourStr.trim() pour interdit les espaces
