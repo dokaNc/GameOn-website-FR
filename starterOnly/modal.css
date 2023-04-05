@@ -99,18 +99,16 @@ img {
   }
 }
 
-
-
- @media screen and (max-width: 540px) {
+@media screen and (max-width: 540px) {
   .topnav a {
     display: none;
   }
-  
+
   .topnav a.icon {
     float: right;
     display: block;
   }
-} 
+}
 
 main {
   font-size: 130%;
@@ -122,8 +120,6 @@ main {
   margin: 1px 20px 15px;
   border-radius: 2rem;
   text-align: justify;
-
-
 }
 
 .modal-btn {
@@ -235,6 +231,14 @@ input {
   opacity: 1;
 }
 .formData[data-error-visible="true"] .text-control {
+  border: 2px solid #e54858;
+}
+
+.formData[data-error-visible="true"] .city {
+  border: 2px solid #e54858;
+}
+
+.formData[data-error-visible="true"] .condition {
   border: 2px solid #e54858;
 }
 /* 
@@ -540,4 +544,3 @@ footer {
     opacity: 1;
   }
 }
-
