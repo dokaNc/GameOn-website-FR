@@ -2,6 +2,8 @@
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
+const alertSuccess = document.querySelector(".alert-success");
+const form = document.querySelector("form");
 
 // DOM FORM INPUT Elements
 const firstName = document.getElementById("first");
@@ -35,65 +37,104 @@ closeSpan.addEventListener("click", () => {
   modalbg.style.display = "";
 });
 
-// Check Minimum 2 Characters
-const checkName = (input, formData, event) => {
+// Check Minimum 2 Characters and no space at beginning
+const checkName = (input) => {
   const regex = new RegExp(/^\s+/);
 
-  return input.value.length <= 2 || regex.test(input.value)
-    ? ((formData.dataset.errorVisible = true), event.preventDefault())
-    : (formData.dataset.errorVisible = false);
+  if (input.value.length <= 2 || regex.test(input.value)) {
+    input.parentElement.setAttribute("data-error-visible", "true");
+    return false;
+  } else {
+    input.parentElement.setAttribute("data-error-visible", "false");
+    return true;
+  }
 };
 
 // Check Email with Regex
-const checkIsEmail = (email, formData, event) => {
+const checkIsEmail = (email) => {
   const regex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s]{2,}$/);
 
-  return !regex.test(email.value)
-    ? ((formData.dataset.errorVisible = true), event.preventDefault())
-    : (formData.dataset.errorVisible = false);
+  if (!regex.test(email.value)) {
+    email.parentElement.setAttribute("data-error-visible", "true");
+    return false;
+  } else {
+    email.parentElement.setAttribute("data-error-visible", "false");
+    return true;
+  }
 };
 
 // Check Date dd/mm/yyyy with Regex
-const checkIsDate = (date, formData, event) => {
+const checkIsDate = (date) => {
   const regex = new RegExp(/^\d{4}-(0?\d|1[0-2])-(0?\d|[12]\d|3[01])$/);
 
-  return !regex.test(date.value)
-    ? ((formData.dataset.errorVisible = true), event.preventDefault())
-    : (formData.dataset.errorVisible = false);
+  if (!regex.test(date.value)) {
+    date.parentElement.setAttribute("data-error-visible", "true");
+    return false;
+  } else {
+    date.parentElement.setAttribute("data-error-visible", "false");
+    return true;
+  }
 };
 
 // Check is Integer
-const checkNumber = (number, formData, event) => {
-  return !Number.isInteger(number) || number < 0 || number > 99
-    ? ((formData.dataset.errorVisible = true), event.preventDefault())
-    : (formData.dataset.errorVisible = false);
+const checkNumber = (number) => {
+  let convertNum = parseInt(number.value);
+  if (!Number.isInteger(convertNum) || convertNum < 0 || convertNum > 99) {
+    number.parentElement.setAttribute("data-error-visible", "true");
+    return false;
+  } else {
+    number.parentElement.setAttribute("data-error-visible", "false");
+    return true;
+  }
 };
 
 // Check Country is Checked
-const countryIsChecked = (formData, event) => {
+const countryIsChecked = () => {
   const countryRadio = document.querySelector("input[name='location']:checked");
-  return !countryRadio
-    ? ((formData.dataset.errorVisible = true), event.preventDefault())
-    : (formData.dataset.errorVisible = false);
+  if (!countryRadio) {
+    formData[5].setAttribute("data-error-visible", "true");
+    return false;
+  } else {
+    formData[5].setAttribute("data-error-visible", "false");
+    return true;
+  }
 };
 
 // Check "condition général" is Checked
-const conditionIsChecked = (checkbox, formData, event) => {
-  return !checkbox.checked
-    ? ((formData.dataset.errorVisible = true), event.preventDefault())
-    : (formData.dataset.errorVisible = false);
+const conditionIsChecked = (checkbox) => {
+  if (!checkbox.checked) {
+    checkbox.parentElement.setAttribute("data-error-visible", "true");
+    return false;
+  } else {
+    checkbox.parentElement.setAttribute("data-error-visible", "false");
+    return true;
+  }
 };
 
-// Form on Submit
-addEventListener("submit", (event) => {
-  checkName(firstName, formData[0], event);
-  checkName(lastName, formData[1], event);
-  checkIsEmail(email, formData[2], event);
-  checkIsDate(birthdate, formData[3], event);
-  checkNumber(parseInt(numbTournament.value), formData[4], event);
-  countryIsChecked(formData[5], event);
-  conditionIsChecked(conditionCheckbox, formData[6], event);
-});
+// Form on Submit -> validationForm fonction
+form.addEventListener("submit", validationForm);
 
-// Birthdate constrainte: -18 ans interdit & date du genre année 1750
-// Input first & last regex pour ne pas autoriser les chiffres & la method yourStr.trim() pour interdit les espaces
+// Check the Validation of Form
+function validationForm(event) {
+  event.preventDefault();
+  let isChecked = [];
+  isChecked.push(
+    checkName(firstName),
+    checkName(lastName),
+    checkIsEmail(email),
+    checkIsDate(birthdate),
+    checkNumber(numbTournament),
+    countryIsChecked(),
+    conditionIsChecked(conditionCheckbox)
+  );
+
+  if (!isChecked.includes(false)) {
+    formValidate();
+  }
+}
+
+// Show the Alert Success
+function formValidate() {
+  modalbg.style.display = "none";
+  alertSuccess.style.display = "block";
+}
