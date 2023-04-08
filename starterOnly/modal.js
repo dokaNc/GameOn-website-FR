@@ -37,6 +37,12 @@ closeSpan.addEventListener("click", () => {
   modalbg.style.display = "";
 });
 
+// Close Alert Message
+const closeAlert = document.querySelector(".close-alert");
+closeAlert.addEventListener("click", () => {
+  alertSuccess.style.display = "none";
+});
+
 // Check Minimum 2 Characters and no space at beginning
 const checkName = (input) => {
   const regex = new RegExp(/^\s+/);
